@@ -1,0 +1,32 @@
+Warning[205] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 2 : Found directive in column 1. (__CONFIG)
+Warning[205] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 5 : Found directive in column 1. (__CONFIG)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 8 : Found label after column 1. (CCP1)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 9 : Found label after column 1. (IsLongPush)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 10 : Found label after column 1. (Selected)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 11 : Found label after column 1. (StableStateCounterMAX)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 12 : Found label after column 1. (OneShortHumanPushCounterMAX)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 13 : Found label after column 1. (OneLongHumanPushCounter)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 14 : Found label after column 1. (UserCommandSelectionDelay)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 16 : Found label after column 1. (FALSE)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 17 : Found label after column 1. (TRUE)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 19 : Found label after column 1. (OFF_MODE)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 20 : Found label after column 1. (LIGHT_ON)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 21 : Found label after column 1. (STROBE_ON)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 22 : Found label after column 1. (SOS_ON)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 23 : Found label after column 1. (RED_ON)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 26 : Found label after column 1. (Debug)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 29 : Found label after column 1. (WithRedLight)
+Warning[205] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 33 : Found directive in column 1. (cblock)
+Warning[205] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 57 : Found directive in column 1. (ENDC)
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 119 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 120 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 124 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 128 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 136 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 140 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 144 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 246 : Using default destination of 1 (file).
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 259 : Using default destination of 1 (file).
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 317 : Using default destination of 1 (file).
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LED\LED.ASM 352 : Using default destination of 1 (file).
