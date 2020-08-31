@@ -8,27 +8,27 @@ Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 12 : Found label a
 Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 13 : Found label after column 1. (OneLongHumanPushCounter)
 Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 14 : Found label after column 1. (UserCommandSelectionDelay)
 Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 15 : Found label after column 1. (PatternMaskInitial)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 17 : Found label after column 1. (FALSE)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 18 : Found label after column 1. (TRUE)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 20 : Found label after column 1. (OFF_MODE)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 21 : Found label after column 1. (LIGHT_ON)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 22 : Found label after column 1. (STROBE_ON)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 23 : Found label after column 1. (SOS_ON)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 24 : Found label after column 1. (RED_ON)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 27 : Found label after column 1. (Debug)
-Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 30 : Found label after column 1. (WithRedLight)
-Warning[205] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 34 : Found directive in column 1. (cblock)
-Warning[205] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 70 : Found directive in column 1. (ENDC)
-Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 204 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 16 : Found label after column 1. (BrightnessMaxSteps)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 18 : Found label after column 1. (FALSE)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 19 : Found label after column 1. (TRUE)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 21 : Found label after column 1. (OFF_MODE)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 22 : Found label after column 1. (LIGHT_ON)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 23 : Found label after column 1. (STROBE_ON)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 24 : Found label after column 1. (SOS_ON)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 25 : Found label after column 1. (RED_ON)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 28 : Found label after column 1. (Debug)
+Warning[207] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 31 : Found label after column 1. (WithRedLight)
+Warning[205] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 35 : Found directive in column 1. (cblock)
+Warning[205] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 71 : Found directive in column 1. (ENDC)
 Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 205 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 209 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 213 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 217 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 221 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 225 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 229 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 206 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 210 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 214 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 218 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 222 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 226 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 230 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 350 : Using default destination of 1 (file).
-Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 363 : Using default destination of 1 (file).
-Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 441 : Using default destination of 1 (file).
-Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 487 : Using default destination of 1 (file).
+Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 231 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 351 : Using default destination of 1 (file).
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 364 : Using default destination of 1 (file).
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 448 : Using default destination of 1 (file).

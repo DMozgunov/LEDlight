@@ -13,6 +13,7 @@ __CONFIG    _CONFIG2, _WRT_OFF & _BOR21V
     OneLongHumanPushCounter     EQU 0xF8        ; Add to counter to get Carry bit for a long Human push
     UserCommandSelectionDelay   EQU 0x5F        ; Wait this number of counts to give user time for choise
     PatternMaskInitial          EQU 0x01
+    BrightnessMaxSteps          EQU 0x06        ; Brughtness table length
 
     FALSE	                    EQU 0
     TRUE	                    EQU 1
@@ -255,10 +256,9 @@ MAIN_PROGRAM_CONFIG:
     movlw		b'00110000'     ; Timer1 config
 	movwf		T1CON           ; Timer1 prescaler 1:8 and on
 
+    call        TURN_OFF        ; initial state
 
-    call        TURN_OFF
-
-    movlw       b'10010010'
+    movlw       b'00101001'
     movwf       Pattern0
 
     movlw       b'10001111'
@@ -266,6 +266,7 @@ MAIN_PROGRAM_CONFIG:
 
     movlw       PatternMaskInitial
     movwf       PatternMask
+
 	bcf		    PIR1,TMR1IF		; timer1 interrupt on
 
 ; -----------------------------------------------------------------------
@@ -280,10 +281,8 @@ MAIN_PROGRAM_LOOP:
     ;debug
 
 
-
 ; Button debounce and push time count
 CHECK_BUTTON:
-
     
     clrf        ShortPushCounterNumber      ; Number of time periods when button was pushed and which counts as a short human push
 
@@ -390,8 +389,8 @@ TurnOFF:
 
 TurnOnWithLongPush:
 
-    ;RED_ON                      EQU b'00000011'
-    ;SOS_ON                      EQU b'00000100'
+;    SOS_ON                      EQU b'00000011'
+;    RED_ON                      EQU b'00000100'
 
     if ( WithRedLight )             ; either red light or SOS on long push from OFF state
         movlw   RED_ON
@@ -405,25 +404,25 @@ TurnOnWithLongPush:
 
     bsf         CurrentMode,Selected
 
-	movlw		b'00101100'	  	;
-	movwf		CCP1CON			; activate PWM 
 
     ; if it is SOS -then max brightness
     if ( WithRedLight )             ; either red light or SOS on long push from OFF state
-        movlw   0x01
+        
+        movlw       0x01
+        movwf       BightnessSelection
+        
     else
-        movlw   0x06
+
+        movlw       BrightnessMaxSteps
+        movwf       BightnessSelection
+
+        call        SET_PWM_by_lookupTable        ;  
+        movwf       CCPR1L                        ; 
+
+        btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
+        bsf         T1CON,TMR1ON
+
     endif
-
-    call        SET_PWM_by_lookupTable        ;  
-    movwf       CCPR1L                        ; 
-
-    btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
-    bsf         T1CON,TMR1ON
-
-    ;debug
-    ;movwf       PORTD                        ; 
-    ;debug
 
     goto        USER_CHOISE_SELECTION_END
 
@@ -484,16 +483,40 @@ BRIGHTNESS_OR_PATTERN_CHANGE:
 
     ; make no change for red led
 
-    incf        BightnessSelection
+    btfsc       CurrentMode,2                  ; Red Light - no change at all
+    goto        BRIGHTNESS_OR_PATTERN_CHANGE_END
+
+    ; for SOS mode let's start from brightest setting and decrease
+    ;SOS_ON                      EQU b'00000011'
+    movf        CurrentMode,w                  ; SOS mode and 'selected' bit
+    
+    xorlw       b'10000011'
+    btfsc       STATUS,Z
+    goto        SOSReverseBrightnessChange
+
+    ; default behavior with brightness increasing in circle from less to most bright setting
+    incf        BightnessSelection,f
     movf        BightnessSelection,w
     xorlw       0x07
-
     btfsc       STATUS,Z
     clrf        BightnessSelection
+    goto        ApplyBrightness
 
+SOSReverseBrightnessChange
+
+    movlw       BrightnessMaxSteps
+    decf        BightnessSelection,f
+    btfsc       STATUS,Z
+    movwf       BightnessSelection
+
+
+ApplyBrightness:
     movfw       BightnessSelection            ; 
     call        SET_PWM_by_lookupTable        ; 
     movwf       CCPR1L                        ; 
+
+    goto        BRIGHTNESS_OR_PATTERN_CHANGE_END
+
 
     ;debug
 ;    movwf       PORTD                        ; 
@@ -506,16 +529,10 @@ BRIGHTNESS_OR_PATTERN_CHANGE:
 ;    nop
     ;debug
 
-     ;retlw     b'00000110'             ; 0
-     ;retlw     b'00001110'             ; 1
-     ;retlw     b'00010110'             ; 2
-     ;retlw     b'00100110'             ; 3
-     ;retlw     b'10000110'             ; 4
-     ;retlw     b'10011110'             ; 5
-     ;retlw     b'11000110'             ; 6
 
 
-BRIGHTNESS_OR_PATTERN_CHANGE_END
+
+BRIGHTNESS_OR_PATTERN_CHANGE_END:
 
     goto        MAIN_PROGRAM_LOOP
 
@@ -587,13 +604,13 @@ SET_PWM_by_lookupTable:
      movwf     PCL                 ; modify PCL
 
 TableStart:
-     retlw     b'00000110'             ; 0
-     retlw     b'00001110'             ; 1
-     retlw     b'00010110'             ; 2
-     retlw     b'00100110'             ; 3
-     retlw     b'10000110'             ; 4
-     retlw     b'10011110'             ; 5
-     retlw     b'11000110'             ; 6
+     retlw     b'00000011'             ; 0
+     retlw     b'00000111'             ; 1
+     retlw     b'00001011'             ; 2
+     retlw     b'00010011'             ; 3
+     retlw     b'00100011'             ; 4
+     retlw     b'01001111'             ; 5
+     retlw     b'10100011'             ; 6
 ; SET_PWM_by_lookupTable_END
 
      
