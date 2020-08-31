@@ -152,11 +152,41 @@ SetCurrentLEDStepOFF:
     clrf		CCP1CON			    ; disable PWM
 
 
-    goto Prepare_for_next_check
+    goto STROBE_SOS_Delay
 
 SetCurrentLEDStepON:
    	movlw		b'00101100'	  	    ;
 	movwf		CCP1CON			    ; enable PWM 
+
+
+STROBE_SOS_Delay:
+    ;movlw       b'00101001'
+    ;movwf       Pattern0
+
+    ;movlw       b'10001111'
+    ;movwf       Delay0
+
+    movf        PatternMask,w
+    andwf       Delay0,w
+
+    btfsc       STATUS,Z
+    goto        SetCurrentLEDDelayShort    ;
+    goto        SetCurrentLEDDelayLong     ;
+
+SetCurrentLEDDelayShort:
+
+    movlw       0x8F
+    movwf       TMR1H
+
+    goto Prepare_for_next_check
+
+SetCurrentLEDDelayLong:
+    nop
+
+    ;debug
+    ;movf        Delay0,w
+    ;movwf       PORTD               ; 
+    ;debug
 
 Prepare_for_next_check:
     rlf         PatternMask,f
@@ -167,12 +197,6 @@ Prepare_for_next_check:
     movlw       PatternMaskInitial
     movwf       PatternMask
     nop
-
-    ;debug
-    ;movf        PatternMask,w
-    ;movwf       PORTD               ; 
-    ;debug
-
 ; STROBE/SOS pattern processing routine END
 
 ExitISR
@@ -258,10 +282,10 @@ MAIN_PROGRAM_CONFIG:
 
     call        TURN_OFF        ; initial state
 
-    movlw       b'00101001'
+    movlw       b'01010101'
     movwf       Pattern0
 
-    movlw       b'10001111'
+    movlw       b'00010001'
     movwf       Delay0
 
     movlw       PatternMaskInitial

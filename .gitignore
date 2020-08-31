@@ -1,4 +1,4 @@
-.cof
-.err
-.lst
-.o
+*.cof
+*.err
+*.lst
+*.o
