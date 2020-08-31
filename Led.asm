@@ -9,9 +9,10 @@ __CONFIG    _CONFIG2, _WRT_OFF & _BOR21V
     IsLongPush                  EQU 7           ; 7th bit of ButtonState
     Selected                    EQU 7           ; 7th bit of CurrentMode
     StableStateCounterMAX       EQU 0x0A        ; For button debounce - count state in a row
-    OneShortHumanPushCounterMAX EQU 0x08        ; Count state to get one Human button push
+    OneShortHumanPushCounterMAX EQU 0x07        ; Count state to get one Human button push
     OneLongHumanPushCounter     EQU 0xF8        ; Add to counter to get Carry bit for a long Human push
-    UserCommandSelectionDelay   EQU 0x2F        ; Wait this number of counts to give user time for choise
+    UserCommandSelectionDelay   EQU 0x5F        ; Wait this number of counts to give user time for choise
+    PatternMaskInitial          EQU 0x01
 
     FALSE	                    EQU 0
     TRUE	                    EQU 1
@@ -44,6 +45,18 @@ cblock 0x20
     ShortPushCounterNumber  ; count Number of a Short human button pushes
     UserCommandSelectionCounter 
    
+    ; strobe routine
+
+    Pattern0
+    Pattern1
+    Pattern2
+
+    Delay0
+    Delay1
+    Delay2
+
+    PatternMask
+
     ; Interrupr service
 	W_Save
 	STATUS_Save
@@ -79,28 +92,95 @@ ISR       CODE    0x0004	    ; Interrupts
 
     bcf         STATUS,RP0		
 
+
+; *******************************************************************
+; *		lightness in PWM %
+; *******************************************************************
 ; PWM
 	btfsc		PIR1,TMR2IF		    ; PWM timer overflow
     goto        ServiceTimer2
-    goto        ExitISR
+    goto        ServiceTimer1
 
 ServiceTimer2:
+	bcf			PIR1,TMR2IF		    ; clear timer2
+
+    movf        CurrentMode,w       ; If current mode is 0x00 then PWM duty should not be changed
+    btfsc       STATUS,Z
+    goto        ServiceTimer1
 
     movfw       BightnessSelection            ; 
     call        SET_PWM_by_lookupTable        ; 
     movwf       CCPR1L                        ; 
 
-	bcf			PIR1,TMR2IF		    ; 
+
 
 ;PWM - end
 
+
+; *******************************************************************
+; *		STROBE/SOS pattern processing routine
+; *******************************************************************
+; 
+ServiceTimer1:
+
+	btfsc		PIR1,TMR1IF		    ; PWM timer overflow
+    goto        STROBE_SOS_Pattern
+    goto        ExitISR
+
+STROBE_SOS_Pattern:
+
+; Timer1 int is used for delay
+	bcf			PIR1,TMR1IF		    ; clear
+
+    ; Check for current mode - if not Strobe/sos - exit (this should not happen - error)
+    ;STROBE_ON                   EQU b'00000010'
+    ;SOS_ON                      EQU b'00000011'
+
+    btfss       CurrentMode,1                
+    goto        ExitISR
+
+    ; Check pattern and turn LED on or off
+    movf        PatternMask,w
+    andwf       Pattern0,w
+
+    btfsc       STATUS,Z
+    goto        SetCurrentLEDStepOFF    ;must be off
+    goto        SetCurrentLEDStepON     ;must be on
+
+SetCurrentLEDStepOFF:
+    clrf		CCP1CON			    ; disable PWM
+
+
+    goto Prepare_for_next_check
+
+SetCurrentLEDStepON:
+   	movlw		b'00101100'	  	    ;
+	movwf		CCP1CON			    ; enable PWM 
+
+Prepare_for_next_check:
+    rlf         PatternMask,f
+
+    btfss       STATUS,C            ; overflow of PatternMask, must be set to default
+    ; implement cyclic pattern addr change here
+    goto        $+3
+    movlw       PatternMaskInitial
+    movwf       PatternMask
+    nop
+
+    ;debug
+    ;movf        PatternMask,w
+    ;movwf       PORTD               ; 
+    ;debug
+
+; STROBE/SOS pattern processing routine END
+
 ExitISR
-    movf        STATUS_Save,w         ; Restore context
+    movf        STATUS_Save,w       ; Restore context
     movwf       STATUS
     movf        PCLATH_Save,w       
     movwf       PCLATH
  
-    swapf       W_Save,f              ; swapf doesn't affect Status bits, but MOVF would
+    swapf       W_Save,f            ; swapf doesn't affect Status bits, but MOVF would
     swapf       W_Save,w
 
 
@@ -114,10 +194,15 @@ MAIN_PROG CODE
 
 MAIN_PROGRAM_CONFIG:
 
+
+
     bsf         STATUS,RP0     
 
-    bsf         PIE1, TMR1IF	; TMR1 overflow interrupt
-    bsf         PIE1, TMR2IF	; TMR2 overflow interrupt
+    bsf         INTCON,GIE      ; global interrupts enable
+    bsf         INTCON,PEIE
+
+    bsf         PIE1, TMR1IE	; Timer1 overflow interrupt enable
+    bsf         PIE1, TMR2IE	; Timer2 overflow interrupt enable
 
 ; PORT B
     movlw		b'00011111'
@@ -130,11 +215,7 @@ MAIN_PROGRAM_CONFIG:
 
 ; PORT D 
     clrf        TRISD           ; Make PortD all output
-
-; Timer0 config
-    movlw		b'00000100'      
-	movwf		OPTION_REG      ; Timer0 prescaler 1:32
-
+   
 ; PWM config
     movlw	   	0x65			; PWM frequency 0,6ÊÃö
     movwf	   	PR2
@@ -142,9 +223,19 @@ MAIN_PROGRAM_CONFIG:
 ; Outputs
     bsf			STATUS,RP1		; 
     clrf  		ANSELH          ; all the inputs are digital
-
+ 
     bcf			STATUS,RP0		; 
+    
+    bcf         CM1CON0,C1ON    ; disable comparators
+    bcf         CM2CON0,C2ON
+
     bcf			STATUS,RP1
+ 
+    ; remove 'trash' data from port output
+    clrf        PORTA
+    clrf        PORTB
+    clrf        PORTC
+    clrf        PORTD
 
 ; PWM config
  	clrf		CCP2CON			; PWM off 
@@ -152,30 +243,43 @@ MAIN_PROGRAM_CONFIG:
 	clrf		TMR2			; 
 	clrf		CCPR2L			; duty = 0
 	clrf		CCPR1L			; duty = 0
-
-	movlw		b'00101100'	  	;
-	movwf		CCP1CON			; activate PWM 
 	   	  
-	bcf			PIR1,TMR2IF		; timer interrupts on
+	bcf			PIR1,TMR2IF		; timer2 interrupt on
 	
 	clrf		T2CON		  
 	bsf			T2CON,T2CKPS1	; prescaler = 16
 	bsf			T2CON,TMR2ON	; activate timer
 
-
 ; Set default values
-    bcf       STATUS,RP0          ; address Register Bank 0
-    bcf       STATUS,RP1
 
-    clrf      PORTD                         ; init LEDs to all off  
+    movlw		b'00110000'     ; Timer1 config
+	movwf		T1CON           ; Timer1 prescaler 1:8 and on
+
+
     call        TURN_OFF
 
+    movlw       b'10010010'
+    movwf       Pattern0
+
+    movlw       b'10001111'
+    movwf       Delay0
+
+    movlw       PatternMaskInitial
+    movwf       PatternMask
+	bcf		    PIR1,TMR1IF		; timer1 interrupt on
 
 ; -----------------------------------------------------------------------
 ; 		Main program routine
 ; -----------------------------------------------------------------------
  
 MAIN_PROGRAM_LOOP:
+
+    ;debug
+    movf        CurrentMode,w
+    movwf       PORTD               ; 
+    ;debug
+
+
 
 ; Button debounce and push time count
 CHECK_BUTTON:
@@ -226,7 +330,7 @@ ButtonPushed:
     
 
 ButtonNotPushed:
-    ; also process state when vutton was pushed and released
+    ; also process state when button was pushed and released
     ; if it was not at all, ShortPushCounterNumber is 0x00
     movf        ShortPushCounterNumber,w 
     btfsc       STATUS,Z 
@@ -301,6 +405,26 @@ TurnOnWithLongPush:
 
     bsf         CurrentMode,Selected
 
+	movlw		b'00101100'	  	;
+	movwf		CCP1CON			; activate PWM 
+
+    ; if it is SOS -then max brightness
+    if ( WithRedLight )             ; either red light or SOS on long push from OFF state
+        movlw   0x01
+    else
+        movlw   0x06
+    endif
+
+    call        SET_PWM_by_lookupTable        ;  
+    movwf       CCPR1L                        ; 
+
+    btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
+    bsf         T1CON,TMR1ON
+
+    ;debug
+    ;movwf       PORTD                        ; 
+    ;debug
+
     goto        USER_CHOISE_SELECTION_END
 
 UserShortPush:
@@ -333,12 +457,23 @@ UserShortPush:
     btfsc       STATUS,Z           ; Choise menu is cyclic - after last position turn OFF
     goto        TurnOFF
     
+    btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
+    bsf         T1CON,TMR1ON
+
+    btfsc       CurrentMode,1      ; do not turn LED in SOS or Strobe mode - it should happen in ISR
+    goto        USER_CHOISE_SELECTION_END 
+
+
+	movlw		b'00101100'	  	;
+	movwf		CCP1CON			; activate PWM 
+
+    movlw       0x01
+    call        SET_PWM_by_lookupTable        ;  
+    movwf       CCPR1L                        ; 
+
+
 USER_CHOISE_SELECTION_END:
 
-    ;debug
-;    movf        CurrentMode,w
-;    movwf       PORTD
-    ;debug
 
     goto        MAIN_PROGRAM_LOOP
 
@@ -356,13 +491,12 @@ BRIGHTNESS_OR_PATTERN_CHANGE:
     btfsc       STATUS,Z
     clrf        BightnessSelection
 
-
-
-    ;debug
-
     movfw       BightnessSelection            ; 
     call        SET_PWM_by_lookupTable        ; 
-    movwf       PORTD                        ; 
+    movwf       CCPR1L                        ; 
+
+    ;debug
+;    movwf       PORTD                        ; 
 
 ;    btfss       CurrentMode, 4
 ;    goto        $+3
@@ -401,8 +535,21 @@ TURN_OFF:
 
     ;set least brightness available
     clrw                                    ;
-    call      SET_PWM_by_lookupTable        ; 
-    movwf     CCPR1L                        ; 
+    clrf        CCPR1L                        ; 
+
+ 	clrf		CCP2CON			; PWM off 
+ 	clrf		CCP1CON			; PWM off
+	clrf		TMR2			; 
+	clrf		CCPR2L			; duty = 0
+	clrf		CCPR1L			; duty = 0
+	   	  
+    clrf        PORTC           ; when PWM is off it can turn LED on as digital out
+
+	bcf         T1CON,TMR1ON
+    ;debug
+    clrf        PORTD
+    ;debug
+    
 
     return
 

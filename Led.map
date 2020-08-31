@@ -1,13 +1,13 @@
 MPLINK 4.49, Linker
-Linker Map File - Created Fri Aug 28 16:49:25 2020
+Linker Map File - Created Mon Aug 31 21:36:24 2020
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
                 ---------  ---------  ---------  ---------  ---------
                  RES_VECT       code   0x000000    program   0x000002
                    .cinit    romdata   0x000001    program   0x000004
-                      ISR       code   0x000004    program   0x000028
-                MAIN_PROG       code   0x000018    program   0x0000fe
+                      ISR       code   0x000004    program   0x000058
+                MAIN_PROG       code   0x000030    program   0x000144
                    .org_0       code   0x0000f7    program   0x000020
        .config_2007_LED.O       code   0x002007    program   0x000002
        .config_2008_LED.O       code   0x002008    program   0x000002
@@ -18,69 +18,81 @@ Linker Map File - Created Fri Aug 28 16:49:25 2020
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000002      
-                            0x000004    0x000096      
+                            0x000004    0x0000d1      
                             0x0000f7    0x000106      
                             0x002007    0x002008      
-            168 out of 8455 program addresses used, program memory utilization is 1%
+            227 out of 8455 program addresses used, program memory utilization is 2%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-BRIGHTNESS_OR_PATTERN_CHANGE   0x00007d    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-BRIGHTNESS_OR_PATTERN_CHANGE_END   0x000085    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-           ButtonDebounce   0x00003d    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-          ButtonNotPushed   0x000051    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-             ButtonPushed   0x000048    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-             CHECK_BUTTON   0x000037    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-         CHECK_BUTTON_END   0x00005c    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-            CheckLongPush   0x000065    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-                DELAY_1mS   0x00008f    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-                  ExitISR   0x000011    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-    LookForOneStableState   0x00003a    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-      MAIN_PROGRAM_CONFIG   0x000018    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-        MAIN_PROGRAM_LOOP   0x000037    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-   SET_PWM_by_lookupTable   0x0000f7    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-            ServiceTimer2   0x00000d    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-                 TURN_OFF   0x000086    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-               TableStart   0x000100    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-                  TurnOFF   0x00006a    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-       TurnOnWithLongPush   0x00006c    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-    USER_CHOISE_SELECTION   0x00005c    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-USER_CHOISE_SELECTION_END   0x00007c    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-            UserShortPush   0x000071    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-          _MAIN_PROG_007A   0x000092    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-          _MAIN_PROG_007C   0x000094    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
+BRIGHTNESS_OR_PATTERN_CHANGE   0x0000b1    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+BRIGHTNESS_OR_PATTERN_CHANGE_END   0x0000b9    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+           ButtonDebounce   0x000061    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+          ButtonNotPushed   0x000075    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+             ButtonPushed   0x00006c    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+             CHECK_BUTTON   0x00005b    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+         CHECK_BUTTON_END   0x000080    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+            CheckLongPush   0x000089    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                DELAY_1mS   0x0000ca    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                  ExitISR   0x000029    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+    LookForOneStableState   0x00005e    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+      MAIN_PROGRAM_CONFIG   0x000030    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+        MAIN_PROGRAM_LOOP   0x000059    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+   Prepare_for_next_check   0x000023    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+   SET_PWM_by_lookupTable   0x0000f7    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+       STROBE_SOS_Pattern   0x000017    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+            ServiceTimer1   0x000014    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+            ServiceTimer2   0x00000d    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+     SetCurrentLEDStepOFF   0x00001f    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+      SetCurrentLEDStepON   0x000021    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                 TURN_OFF   0x0000ba    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+               TableStart   0x000100    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                  TurnOFF   0x00008e    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+       TurnOnWithLongPush   0x000090    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+    USER_CHOISE_SELECTION   0x000080    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+USER_CHOISE_SELECTION_END   0x0000b0    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+            UserShortPush   0x00009c    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                _ISR_0025   0x000025    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+          _MAIN_PROG_009D   0x0000cd    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+          _MAIN_PROG_009F   0x0000cf    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
 
 
 
                               Symbols - Sorted by Address
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-            ServiceTimer2   0x00000d    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-                  ExitISR   0x000011    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-      MAIN_PROGRAM_CONFIG   0x000018    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-             CHECK_BUTTON   0x000037    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-        MAIN_PROGRAM_LOOP   0x000037    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-    LookForOneStableState   0x00003a    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-           ButtonDebounce   0x00003d    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-             ButtonPushed   0x000048    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-          ButtonNotPushed   0x000051    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-         CHECK_BUTTON_END   0x00005c    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-    USER_CHOISE_SELECTION   0x00005c    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-            CheckLongPush   0x000065    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-                  TurnOFF   0x00006a    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-       TurnOnWithLongPush   0x00006c    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-            UserShortPush   0x000071    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-USER_CHOISE_SELECTION_END   0x00007c    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-BRIGHTNESS_OR_PATTERN_CHANGE   0x00007d    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-BRIGHTNESS_OR_PATTERN_CHANGE_END   0x000085    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-                 TURN_OFF   0x000086    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-                DELAY_1mS   0x00008f    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-          _MAIN_PROG_007A   0x000092    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-          _MAIN_PROG_007C   0x000094    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-   SET_PWM_by_lookupTable   0x0000f7    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
-               TableStart   0x000100    program     static C:\Pk2 Lessons\44Pin Demo Board\led\led.asm
+            ServiceTimer2   0x00000d    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+            ServiceTimer1   0x000014    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+       STROBE_SOS_Pattern   0x000017    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+     SetCurrentLEDStepOFF   0x00001f    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+      SetCurrentLEDStepON   0x000021    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+   Prepare_for_next_check   0x000023    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                _ISR_0025   0x000025    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                  ExitISR   0x000029    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+      MAIN_PROGRAM_CONFIG   0x000030    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+        MAIN_PROGRAM_LOOP   0x000059    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+             CHECK_BUTTON   0x00005b    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+    LookForOneStableState   0x00005e    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+           ButtonDebounce   0x000061    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+             ButtonPushed   0x00006c    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+          ButtonNotPushed   0x000075    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+         CHECK_BUTTON_END   0x000080    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+    USER_CHOISE_SELECTION   0x000080    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+            CheckLongPush   0x000089    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                  TurnOFF   0x00008e    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+       TurnOnWithLongPush   0x000090    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+            UserShortPush   0x00009c    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+USER_CHOISE_SELECTION_END   0x0000b0    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+BRIGHTNESS_OR_PATTERN_CHANGE   0x0000b1    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+BRIGHTNESS_OR_PATTERN_CHANGE_END   0x0000b9    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                 TURN_OFF   0x0000ba    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+                DELAY_1mS   0x0000ca    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+          _MAIN_PROG_009D   0x0000cd    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+          _MAIN_PROG_009F   0x0000cf    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+   SET_PWM_by_lookupTable   0x0000f7    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
+               TableStart   0x000100    program     static C:\Pk2 Lessons\44Pin Demo Board\LEDlight\led.asm
 
 
