@@ -29,6 +29,6 @@ Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 222 : Register in 
 Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 226 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 230 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 231 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 351 : Using default destination of 1 (file).
-Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 364 : Using default destination of 1 (file).
-Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 448 : Using default destination of 1 (file).
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 349 : Using default destination of 1 (file).
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 362 : Using default destination of 1 (file).
+Message[305] C:\PK2 LESSONS\44PIN DEMO BOARD\LEDLIGHT\LED.ASM 440 : Using default destination of 1 (file).

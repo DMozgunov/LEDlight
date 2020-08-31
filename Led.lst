@@ -1,4 +1,4 @@
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  1
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -57,7 +57,7 @@ Warning[207]: Found label after column 1. (STROBE_ON)
   00000002            00023     STROBE_ON                   EQU b'00000010'
 Warning[207]: Found label after column 1. (SOS_ON)
   00000003            00024     SOS_ON                      EQU b'00000011'
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  2
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -116,7 +116,7 @@ Warning[205]: Found directive in column 1. (cblock)
 Warning[205]: Found directive in column 1. (ENDC)
                       00071 endc
                       00072      
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  3
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -175,7 +175,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00123 ; *******************************************************************
                       00124 ; 
 0014                  00125 ServiceTimer1:
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  4
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  4
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -234,7 +234,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00176 ; STROBE/SOS pattern processing routine END
                       00177 
 0029                  00178 ExitISR
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  5
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  5
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -293,7 +293,7 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                       00223 
                       00224 ; Outputs
 000C   1703           00225     bsf                 STATUS,RP1              ; 
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  6
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  6
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -335,24 +335,24 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
 001F   3030           00256     movlw               b'00110000'     ; Timer1 config
 0020   0090           00257         movwf           T1CON           ; Timer1 prescaler 1:8 and on
                       00258 
-                      00259 
-0021   2???           00260     call        TURN_OFF
-                      00261 
-0022   3029           00262     movlw       b'00101001'
-0023   00A9           00263     movwf       Pattern0
-                      00264 
-0024   308F           00265     movlw       b'10001111'
-0025   00AC           00266     movwf       Delay0
-                      00267 
-0026   3001           00268     movlw       PatternMaskInitial
-0027   00AF           00269     movwf       PatternMask
+0021   2???           00259     call        TURN_OFF        ; initial state
+                      00260 
+0022   3029           00261     movlw       b'00101001'
+0023   00A9           00262     movwf       Pattern0
+                      00263 
+0024   308F           00264     movlw       b'10001111'
+0025   00AC           00265     movwf       Delay0
+                      00266 
+0026   3001           00267     movlw       PatternMaskInitial
+0027   00AF           00268     movwf       PatternMask
+                      00269 
 0028   100C           00270         bcf                 PIR1,TMR1IF         ; timer1 interrupt on
                       00271 
                       00272 ; -----------------------------------------------------------------------
                       00273 ;               Main program routine
                       00274 ; -----------------------------------------------------------------------
                       00275  
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  7
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  7
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -361,403 +361,402 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0029                  00276 MAIN_PROGRAM_LOOP:
                       00277 
                       00278     ;debug
-                      00279 ;    movf        CurrentMode,w
-                      00280 ;    movwf       PORTD               ; 
+0029   0821           00279     movf        CurrentMode,w
+002A   0088           00280     movwf       PORTD               ; 
                       00281     ;debug
                       00282 
                       00283 
-                      00284 
-                      00285 ; Button debounce and push time count
-0029                  00286 CHECK_BUTTON:
-                      00287 
-                      00288     
-0029   01A7           00289     clrf        ShortPushCounterNumber      ; Number of time periods when button was pushed and which co
+                      00284 ; Button debounce and push time count
+002B                  00285 CHECK_BUTTON:
+                      00286     
+002B   01A7           00287     clrf        ShortPushCounterNumber      ; Number of time periods when button was pushed and which co
                             unts as a short human push
-                      00290 
-002A   3007           00291     movlw       OneShortHumanPushCounterMAX
-002B   00A6           00292     movwf       ShortPushCounter
-                      00293 
-002C                  00294 LookForOneStableState:
-002C   300A           00295         movlw           StableStateCounterMAX           ; we need to see this many stable 'button is pre
+                      00288 
+002C   3007           00289     movlw       OneShortHumanPushCounterMAX
+002D   00A6           00290     movwf       ShortPushCounter
+                      00291 
+002E                  00292 LookForOneStableState:
+002E   300A           00293         movlw           StableStateCounterMAX           ; we need to see this many stable 'button is pre
                             ssed' states for debounce
-002D   00A4           00296         movwf           StableStateCounter
-002E   01A5           00297     clrf        ButtonPushCounterTMP
-                      00298 
-002F                  00299 ButtonDebounce:         
-002F   0103           00300     clrw                                    ; 
-0030   1C06           00301     btfss       PORTB,0                     ; wait for switch to go low
-0031   0A25           00302     incf        ButtonPushCounterTMP,w      ; if it's low, bump the stable state counter
-0032   00A5           00303     movwf       ButtonPushCounterTMP        ; 
+002F   00A4           00294         movwf           StableStateCounter
+0030   01A5           00295     clrf        ButtonPushCounterTMP
+                      00296 
+0031                  00297 ButtonDebounce:         
+0031   0103           00298     clrw                                    ; 
+0032   1C06           00299     btfss       PORTB,0                     ; wait for switch to go low
+0033   0A25           00300     incf        ButtonPushCounterTMP,w      ; if it's low, bump the stable state counter
+0034   00A5           00301     movwf       ButtonPushCounterTMP        ; 
+                      00302 
+0035   2???           00303     call                DELAY_1mS                   ; wait before next stable state check
                       00304 
-0033   2???           00305     call                DELAY_1mS                   ; wait before next stable state check
-                      00306 
-0034   0BA4           00307         decfsz          StableStateCounter,f        ; try it again
-0035   2???           00308         goto            ButtonDebounce
-                      00309 
-0036   0825           00310         movf        ButtonPushCounterTMP,w      ; have we seen some stable state in a row?
-0037   3A0A           00311     xorlw       StableStateCounterMAX
-0038   1D03           00312     btfss       STATUS,Z     
-0039   2???           00313         goto            ButtonNotPushed
-                      00314 
-003A                  00315 ButtonPushed:
-                      00316     ; the way we count one Human 'button is pressed' state 
-                      00317     ; we count all short Human pushes
-003A   0BA6           00318     decfsz      ShortPushCounter,f
-003B   2???           00319     goto        LookForOneStableState
-                      00320 
-003C   3007           00321     movlw       OneShortHumanPushCounterMAX
-003D   00A6           00322     movwf       ShortPushCounter
+0036   0BA4           00305         decfsz          StableStateCounter,f        ; try it again
+0037   2???           00306         goto            ButtonDebounce
+                      00307 
+0038   0825           00308         movf        ButtonPushCounterTMP,w      ; have we seen some stable state in a row?
+0039   3A0A           00309     xorlw       StableStateCounterMAX
+003A   1D03           00310     btfss       STATUS,Z     
+003B   2???           00311         goto            ButtonNotPushed
+                      00312 
+003C                  00313 ButtonPushed:
+                      00314     ; the way we count one Human 'button is pressed' state 
+                      00315     ; we count all short Human pushes
+003C   0BA6           00316     decfsz      ShortPushCounter,f
+003D   2???           00317     goto        LookForOneStableState
+                      00318 
+003E   3007           00319     movlw       OneShortHumanPushCounterMAX
+003F   00A6           00320     movwf       ShortPushCounter
+                      00321 
+0040   0AA7           00322     incf        ShortPushCounterNumber,f
                       00323 
-003E   0AA7           00324     incf        ShortPushCounterNumber,f
-                      00325 
-003F   1803           00326     btfsc       STATUS,C
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  8
+0041   1803           00324     btfsc       STATUS,C
+0042   03A7           00325     decf        ShortPushCounterNumber,f
+0043   1003           00326     bcf         STATUS,C
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  8
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0040   03A7           00327     decf        ShortPushCounterNumber,f
-0041   1003           00328     bcf         STATUS,C
-                      00329 
-0042   2???           00330     goto        LookForOneStableState    
-                      00331     
-                      00332 
-0043                  00333 ButtonNotPushed:
-                      00334     ; also process state when button was pushed and released
-                      00335     ; if it was not at all, ShortPushCounterNumber is 0x00
-0043   0827           00336     movf        ShortPushCounterNumber,w 
-0044   1903           00337     btfsc       STATUS,Z 
-0045   2???           00338     goto        CHECK_BUTTON_END           
-                      00339 
-                      00340     ; proceed here if button was pushed and released
-0046   30F8           00341     movlw       OneLongHumanPushCounter        
-0047   0727           00342     addwf       ShortPushCounterNumber,w
-                      00343 
-0048   13A2           00344     bcf         ButtonState, IsLongPush                 ; Test for Long push 
-0049   1803           00345     btfsc       STATUS,C
-004A   17A2           00346     bsf         ButtonState, IsLongPush            
-                      00347 
-004B   305F           00348     movlw       UserCommandSelectionDelay               ; Reset user choise time counter - delay before 
+                      00327 
+0044   2???           00328     goto        LookForOneStableState    
+                      00329     
+                      00330 
+0045                  00331 ButtonNotPushed:
+                      00332     ; also process state when button was pushed and released
+                      00333     ; if it was not at all, ShortPushCounterNumber is 0x00
+0045   0827           00334     movf        ShortPushCounterNumber,w 
+0046   1903           00335     btfsc       STATUS,Z 
+0047   2???           00336     goto        CHECK_BUTTON_END           
+                      00337 
+                      00338     ; proceed here if button was pushed and released
+0048   30F8           00339     movlw       OneLongHumanPushCounter        
+0049   0727           00340     addwf       ShortPushCounterNumber,w
+                      00341 
+004A   13A2           00342     bcf         ButtonState, IsLongPush                 ; Test for Long push 
+004B   1803           00343     btfsc       STATUS,C
+004C   17A2           00344     bsf         ButtonState, IsLongPush            
+                      00345 
+004D   305F           00346     movlw       UserCommandSelectionDelay               ; Reset user choise time counter - delay before 
                             choise is processed
-004C   00A8           00349     movwf       UserCommandSelectionCounter
-                      00350 
+004E   00A8           00347     movwf       UserCommandSelectionCounter
+                      00348 
 Message[305]: Using default destination of 1 (file).
-004D   0AA2           00351     incf        ButtonState
-                      00352     ;movfw       ButtonState
-                      00353     
-                      00354     ;debug
-                      00355     ;movwf       PORTD  
+004F   0AA2           00349     incf        ButtonState
+                      00350     ;movfw       ButtonState
+                      00351     
+                      00352     ;debug
+                      00353     ;movwf       PORTD  
+                      00354 
+0050                  00355 CHECK_BUTTON_END:
                       00356 
-004E                  00357 CHECK_BUTTON_END:
-                      00358 
-                      00359 
-                      00360     ; next step is to decode user command
-004E                  00361 USER_CHOISE_SELECTION:
-                      00362 
-                      00363     ; delay for user to make a mode choise
+                      00357 
+                      00358     ; next step is to decode user command
+0050                  00359 USER_CHOISE_SELECTION:
+                      00360 
+                      00361     ; delay for user to make a mode choise
 Message[305]: Using default destination of 1 (file).
-004E   03A8           00364     decf        UserCommandSelectionCounter   
-                      00365 
-                      00366     ; check if current mode is selected
-004F   1BA1           00367     btfsc       CurrentMode,Selected
-0050   2???           00368     goto        CheckLongPush
-                      00369 
-0051   0821           00370     movf        CurrentMode,w 
-0052   1903           00371     btfsc       STATUS,Z                    ; 
-0053   2???           00372     goto        CheckLongPush
-                      00373         
-0054   0828           00374     movf        UserCommandSelectionCounter,w
-0055   1903           00375     btfsc       STATUS,Z
-0056   17A1           00376     bsf         CurrentMode,Selected
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE  9
+0050   03A8           00362     decf        UserCommandSelectionCounter   
+                      00363 
+                      00364     ; check if current mode is selected
+0051   1BA1           00365     btfsc       CurrentMode,Selected
+0052   2???           00366     goto        CheckLongPush
+                      00367 
+0053   0821           00368     movf        CurrentMode,w 
+0054   1903           00369     btfsc       STATUS,Z                    ; 
+0055   2???           00370     goto        CheckLongPush
+                      00371         
+0056   0828           00372     movf        UserCommandSelectionCounter,w
+0057   1903           00373     btfsc       STATUS,Z
+0058   17A1           00374     bsf         CurrentMode,Selected
+                      00375 
+0059                  00376 CheckLongPush:
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE  9
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00377 
-0057                  00378 CheckLongPush:
-                      00379     ; long push must be processed despite UserCommandSelectionCounter
-0057   1FA2           00380     btfss       ButtonState, IsLongPush 
-0058   2???           00381     goto        UserShortPush                         ; not a long push
-                      00382 
-0059   0821           00383     movf        CurrentMode,w                         ; if CurrentMode 0x00 then turn on red light or SO
+                      00377     ; long push must be processed despite UserCommandSelectionCounter
+0059   1FA2           00378     btfss       ButtonState, IsLongPush 
+005A   2???           00379     goto        UserShortPush                         ; not a long push
+                      00380 
+005B   0821           00381     movf        CurrentMode,w                         ; if CurrentMode 0x00 then turn on red light or SO
                             S(from power off)
-005A   1903           00384     btfsc       STATUS,Z                              ; if 
-005B   2???           00385     goto        TurnOnWithLongPush
-                      00386 
-005C                  00387 TurnOFF:
-005C   2???           00388     call        TURN_OFF
+005C   1903           00382     btfsc       STATUS,Z                              ; if 
+005D   2???           00383     goto        TurnOnWithLongPush
+                      00384 
+005E                  00385 TurnOFF:
+005E   2???           00386     call        TURN_OFF
+                      00387 
+005F   2???           00388     goto        USER_CHOISE_SELECTION_END
                       00389 
-005D   2???           00390     goto        USER_CHOISE_SELECTION_END
+0060                  00390 TurnOnWithLongPush:
                       00391 
-005E                  00392 TurnOnWithLongPush:
-                      00393 
-                      00394 ;    SOS_ON                      EQU b'00000011'
-                      00395 ;    RED_ON                      EQU b'00000100'
-                      00396 
-                      00397     if ( WithRedLight )             ; either red light or SOS on long push from OFF state
-                      00398         movlw   RED_ON
-                      00399     else
-005E   3003           00400         movlw   SOS_ON
-                      00401     endif
-                      00402  
-005F   00A1           00403     movwf       CurrentMode
+                      00392 ;    SOS_ON                      EQU b'00000011'
+                      00393 ;    RED_ON                      EQU b'00000100'
+                      00394 
+                      00395     if ( WithRedLight )             ; either red light or SOS on long push from OFF state
+                      00396         movlw   RED_ON
+                      00397     else
+0060   3003           00398         movlw   SOS_ON
+                      00399     endif
+                      00400  
+0061   00A1           00401     movwf       CurrentMode
+                      00402 
+0062   01A2           00403     clrf        ButtonState                  ; processed - Mode changed
                       00404 
-0060   01A2           00405     clrf        ButtonState                  ; processed - Mode changed
+0063   17A1           00405     bsf         CurrentMode,Selected
                       00406 
-0061   17A1           00407     bsf         CurrentMode,Selected
-                      00408 
-                      00409 
-                      00410     ; if it is SOS -then max brightness
-                      00411     if ( WithRedLight )             ; either red light or SOS on long push from OFF state
-                      00412         
-                      00413         movlw       0x01
-                      00414         movwf       BightnessSelection
-                      00415         
-                      00416     else
-                      00417 
-0062   3006           00418         movlw       BrightnessMaxSteps
-0063   00A0           00419         movwf       BightnessSelection
-                      00420 
-0064   2???           00421         call        SET_PWM_by_lookupTable        ;  
-0065   0095           00422         movwf       CCPR1L                        ; 
-                      00423 
-0066   18A1           00424         btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
-0067   1410           00425         bsf         T1CON,TMR1ON
+                      00407 
+                      00408     ; if it is SOS -then max brightness
+                      00409     if ( WithRedLight )             ; either red light or SOS on long push from OFF state
+                      00410         
+                      00411         movlw       0x01
+                      00412         movwf       BightnessSelection
+                      00413         
+                      00414     else
+                      00415 
+0064   3006           00416         movlw       BrightnessMaxSteps
+0065   00A0           00417         movwf       BightnessSelection
+                      00418 
+0066   2???           00419         call        SET_PWM_by_lookupTable        ;  
+0067   0095           00420         movwf       CCPR1L                        ; 
+                      00421 
+0068   18A1           00422         btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
+0069   1410           00423         bsf         T1CON,TMR1ON
+                      00424 
+                      00425     endif
                       00426 
-                      00427     endif
+006A   2???           00427     goto        USER_CHOISE_SELECTION_END
                       00428 
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 10
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 10
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00429 
-                      00430 
-                      00431     ;debug
-                      00432     ;movwf       PORTD                        ; 
-                      00433     ;debug
+006B                  00429 UserShortPush:
+                      00430     ; process short counts
+006B   0822           00431     movf        ButtonState,w 
+006C   1903           00432     btfsc       STATUS,Z                    ; if ButtonState is 0x00 then no action
+006D   2???           00433     goto        USER_CHOISE_SELECTION_END    
                       00434 
-0068   2???           00435     goto        USER_CHOISE_SELECTION_END
-                      00436 
-0069                  00437 UserShortPush:
-                      00438     ; process short counts
-0069   0822           00439     movf        ButtonState,w 
-006A   1903           00440     btfsc       STATUS,Z                    ; if ButtonState is 0x00 then no action
-006B   2???           00441     goto        USER_CHOISE_SELECTION_END    
-                      00442 
-006C   01A2           00443     clrf        ButtonState                 ; processed - Mode changed
-                      00444     
-006D   1BA1           00445     btfsc       CurrentMode,Selected         
-006E   2???           00446     goto        BRIGHTNESS_OR_PATTERN_CHANGE
-                      00447 
+006E   01A2           00435     clrf        ButtonState                 ; processed - Mode changed
+                      00436     
+006F   1BA1           00437     btfsc       CurrentMode,Selected         
+0070   2???           00438     goto        BRIGHTNESS_OR_PATTERN_CHANGE
+                      00439 
 Message[305]: Using default destination of 1 (file).
-006F   0AA1           00448     incf        CurrentMode                 ; select next mode
+0071   0AA1           00440     incf        CurrentMode                 ; select next mode
+                      00441 
+                      00442     ;OFF_MODE                    EQU b'00000000'
+                      00443     ;LIGHT_ON                    EQU b'00000001'
+                      00444     ;STROBE_ON                   EQU b'00000010'
+                      00445     ;SOS_ON                      EQU b'00000011'
+                      00446     ;RED_ON                      EQU b'00000100'
+                      00447 
+0072   0821           00448     movf        CurrentMode,w
                       00449 
-                      00450     ;OFF_MODE                    EQU b'00000000'
-                      00451     ;LIGHT_ON                    EQU b'00000001'
-                      00452     ;STROBE_ON                   EQU b'00000010'
-                      00453     ;SOS_ON                      EQU b'00000011'
-                      00454     ;RED_ON                      EQU b'00000100'
+                      00450     if ( WithRedLight )             ; check if user wants to Turn OFF
+                      00451        xorlw    b'00000101'
+                      00452     else
+0073   3A04           00453        xorlw    b'00000100' 
+                      00454     endif
                       00455 
-0070   0821           00456     movf        CurrentMode,w
-                      00457 
-                      00458     if ( WithRedLight )             ; check if user wants to Turn OFF
-                      00459        xorlw    b'00000101'
-                      00460     else
-0071   3A04           00461        xorlw    b'00000100' 
-                      00462     endif
-                      00463 
-0072   1903           00464     btfsc       STATUS,Z           ; Choise menu is cyclic - after last position turn OFF
-0073   2???           00465     goto        TurnOFF
-                      00466     
-0074   18A1           00467     btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
-0075   1410           00468     bsf         T1CON,TMR1ON
-                      00469 
-0076   18A1           00470     btfsc       CurrentMode,1      ; do not turn LED in SOS or Strobe mode - it should happen in ISR
-0077   2???           00471     goto        USER_CHOISE_SELECTION_END 
-                      00472 
+0074   1903           00456     btfsc       STATUS,Z           ; Menu is cyclic - after last position turn OFF
+0075   2???           00457     goto        TurnOFF
+                      00458     
+0076   18A1           00459     btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
+0077   1410           00460     bsf         T1CON,TMR1ON
+                      00461 
+                      00462 
+                      00463     ; for SOS mode set brightest value, and least for others
+0078   0821           00464     movf        CurrentMode,w                  
+                      00465     
+0079   3A03           00466     xorlw       SOS_ON
+007A   1903           00467     btfsc       STATUS,Z
+007B   2???           00468     goto        $+3
+007C   3001           00469     movlw       0x01
+007D   2???           00470     goto        $+2
+007E   3006           00471     movlw       BrightnessMaxSteps
+007F   0000           00472     nop
                       00473 
-0078   302C           00474         movlw           b'00101100'             ;
-0079   0097           00475         movwf           CCP1CON                 ; activate PWM 
-                      00476 
-007A   3001           00477     movlw       0x01
-007B   2???           00478     call        SET_PWM_by_lookupTable        ;  
-007C   0095           00479     movwf       CCPR1L                        ; 
-                      00480 
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 11
+0080   00A0           00474     movwf       BightnessSelection      ; set up current brightness anyway
+                      00475 
+0081   2???           00476     call        SET_PWM_by_lookupTable        ;  
+0082   0095           00477     movwf       CCPR1L                        ; 
+                      00478 
+0083   18A1           00479     btfsc       CurrentMode,1      ; do not turn LED in SOS or Strobe mode - it should happen in ISR
+0084   2???           00480     goto        USER_CHOISE_SELECTION_END 
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 11
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
                       00481 
-007D                  00482 USER_CHOISE_SELECTION_END:
-                      00483 
+0085   302C           00482         movlw           b'00101100'             ;
+0086   0097           00483         movwf           CCP1CON                 ; activate PWM 
                       00484 
-007D   2???           00485     goto        MAIN_PROGRAM_LOOP
-                      00486 
+                      00485 
+0087                  00486 USER_CHOISE_SELECTION_END:
                       00487 
-007E                  00488 BRIGHTNESS_OR_PATTERN_CHANGE:
-                      00489     ; button has been pushed while mode is already selected
-                      00490     ; change mode settings
+                      00488 
+0087   2???           00489     goto        MAIN_PROGRAM_LOOP
+                      00490 
                       00491 
-                      00492     ; make no change for red led
-                      00493 
-007E   1921           00494     btfsc       CurrentMode,2                  ; Red Light - no change at all
-007F   2???           00495     goto        BRIGHTNESS_OR_PATTERN_CHANGE_END
-                      00496 
-                      00497     ;SOS_ON                      EQU b'00000011'
-0080   0821           00498     movf        CurrentMode,w                  ; SOS mode and 'selected' bit
-                      00499     
-0081   3A83           00500     xorlw       b'10000011'
-0082   1903           00501     btfsc       STATUS,Z
-0083   2???           00502     goto        SOSReverseBrightnessChange
-                      00503 
-0084   0AA0           00504     incf        BightnessSelection,f
-0085   0820           00505     movf        BightnessSelection,w
-0086   3A07           00506     xorlw       0x07
-                      00507 
-0087   1903           00508     btfsc       STATUS,Z
-0088   01A0           00509     clrf        BightnessSelection
-0089   2???           00510     goto        ApplyBrightness
-                      00511 
-008A                  00512 SOSReverseBrightnessChange
-                      00513     ;debug
-008A   0821           00514     movf        CurrentMode,w
-008B   0088           00515     movwf       PORTD               ; 
-                      00516     ;debug
-                      00517 
-008C   1608           00518     bsf         PORTD,4
-                      00519 
-008D   3006           00520     movlw       BrightnessMaxSteps
-008E   03A0           00521     decf        BightnessSelection,f
-008F   1903           00522     btfsc       STATUS,Z
-0090   00A0           00523     movwf       BightnessSelection
+0088                  00492 BRIGHTNESS_OR_PATTERN_CHANGE:
+                      00493     ; button has been pushed while mode is already selected
+                      00494     ; change mode settings
+                      00495 
+                      00496     ; make no change for red led
+                      00497 
+0088   1921           00498     btfsc       CurrentMode,2                  ; Red Light - no change at all
+0089   2???           00499     goto        BRIGHTNESS_OR_PATTERN_CHANGE_END
+                      00500 
+                      00501     ; for SOS mode let's start from brightest setting and decrease
+                      00502     ;SOS_ON                      EQU b'00000011'
+008A   0821           00503     movf        CurrentMode,w                  ; SOS mode and 'selected' bit
+                      00504     
+008B   3A83           00505     xorlw       b'10000011'
+008C   1903           00506     btfsc       STATUS,Z
+008D   2???           00507     goto        SOSReverseBrightnessChange
+                      00508 
+                      00509     ; default behavior with brightness increasing in circle from less to most bright setting
+008E   0AA0           00510     incf        BightnessSelection,f
+008F   0820           00511     movf        BightnessSelection,w
+0090   3A07           00512     xorlw       0x07
+0091   1903           00513     btfsc       STATUS,Z
+0092   01A0           00514     clrf        BightnessSelection
+0093   2???           00515     goto        ApplyBrightness
+                      00516 
+0094                  00517 SOSReverseBrightnessChange
+                      00518 
+0094   3006           00519     movlw       BrightnessMaxSteps
+0095   03A0           00520     decf        BightnessSelection,f
+0096   1903           00521     btfsc       STATUS,Z
+0097   00A0           00522     movwf       BightnessSelection
+                      00523 
                       00524 
-                      00525 
-0091                  00526 ApplyBrightness:
-0091   0820           00527     movfw       BightnessSelection            ; 
-0092   2???           00528     call        SET_PWM_by_lookupTable        ; 
-0093   0095           00529     movwf       CCPR1L                        ; 
-                      00530 
-0094   2???           00531     goto        BRIGHTNESS_OR_PATTERN_CHANGE_END
+0098                  00525 ApplyBrightness:
+0098   0820           00526     movfw       BightnessSelection            ; 
+0099   2???           00527     call        SET_PWM_by_lookupTable        ; 
+009A   0095           00528     movwf       CCPR1L                        ; 
+                      00529 
+009B   2???           00530     goto        BRIGHTNESS_OR_PATTERN_CHANGE_END
+                      00531 
                       00532 
-                      00533 
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 12
+                      00533     ;debug
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 12
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00534     ;debug
-                      00535 ;    movwf       PORTD                        ; 
-                      00536 
-                      00537 ;    btfss       CurrentMode, 4
-                      00538 ;    goto        $+3
-                      00539 ;    bcf         CurrentMode, 4
-                      00540 ;    goto        $+2
-                      00541 ;    bsf         CurrentMode, 4
-                      00542 ;    nop
-                      00543     ;debug
+                      00534 ;    movwf       PORTD                        ; 
+                      00535 
+                      00536 ;    btfss       CurrentMode, 4
+                      00537 ;    goto        $+3
+                      00538 ;    bcf         CurrentMode, 4
+                      00539 ;    goto        $+2
+                      00540 ;    bsf         CurrentMode, 4
+                      00541 ;    nop
+                      00542     ;debug
+                      00543 
                       00544 
                       00545 
                       00546 
-                      00547 
-0095                  00548 BRIGHTNESS_OR_PATTERN_CHANGE_END:
-                      00549 
-0095   2???           00550     goto        MAIN_PROGRAM_LOOP
+009C                  00547 BRIGHTNESS_OR_PATTERN_CHANGE_END:
+                      00548 
+009C   2???           00549     goto        MAIN_PROGRAM_LOOP
+                      00550 
                       00551 
                       00552 
-                      00553 
-                      00554 ; -----------------------------------------------------------------------
-                      00555 ; *             Subroutines
-                      00556 ; -----------------------------------------------------------------------
+                      00553 ; -----------------------------------------------------------------------
+                      00554 ; *             Subroutines
+                      00555 ; -----------------------------------------------------------------------
+                      00556 
                       00557 
-                      00558 
-0096                  00559 TURN_OFF:
-0096   01A1           00560     clrf      CurrentMode                   ;
-0097   01A2           00561     clrf      ButtonState                   ;
-0098   01A3           00562     clrf      StrobeMode                    ;
-0099   01A0           00563     clrf      BightnessSelection            ; 
-009A   01A8           00564     clrf      UserCommandSelectionCounter   ;
-                      00565 
-                      00566     ;set least brightness available
-009B   0103           00567     clrw                                    ;
-009C   0195           00568     clrf        CCPR1L                        ; 
-                      00569 
-009D   019D           00570         clrf            CCP2CON                 ; PWM off 
-009E   0197           00571         clrf            CCP1CON                 ; PWM off
-009F   0191           00572         clrf            TMR2                    ; 
-00A0   019B           00573         clrf            CCPR2L                  ; duty = 0
-00A1   0195           00574         clrf            CCPR1L                  ; duty = 0
-                      00575                   
-00A2   0187           00576     clrf        PORTC           ; when PWM is off it can turn LED on as digital out
-                      00577 
-00A3   1010           00578         bcf         T1CON,TMR1ON
-                      00579     ;debug
-00A4   0188           00580     clrf        PORTD
-                      00581     ;debug
-                      00582     
-                      00583 
-00A5   0008           00584     return
+009D                  00558 TURN_OFF:
+009D   01A1           00559     clrf      CurrentMode                   ;
+009E   01A2           00560     clrf      ButtonState                   ;
+009F   01A3           00561     clrf      StrobeMode                    ;
+00A0   01A0           00562     clrf      BightnessSelection            ; 
+00A1   01A8           00563     clrf      UserCommandSelectionCounter   ;
+                      00564 
+                      00565     ;set least brightness available
+00A2   0103           00566     clrw                                    ;
+00A3   0195           00567     clrf        CCPR1L                        ; 
+                      00568 
+00A4   019D           00569         clrf            CCP2CON                 ; PWM off 
+00A5   0197           00570         clrf            CCP1CON                 ; PWM off
+00A6   0191           00571         clrf            TMR2                    ; 
+00A7   019B           00572         clrf            CCPR2L                  ; duty = 0
+00A8   0195           00573         clrf            CCPR1L                  ; duty = 0
+                      00574                   
+00A9   0187           00575     clrf        PORTC           ; when PWM is off it can turn LED on as digital out
+                      00576 
+00AA   1010           00577         bcf         T1CON,TMR1ON
+                      00578     ;debug
+00AB   0188           00579     clrf        PORTD
+                      00580     ;debug
+                      00581     
+                      00582 
+00AC   0008           00583     return
+                      00584 
                       00585 
-                      00586 
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 13
+                      00586 ; *******************************************************************
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 13
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00587 ; *******************************************************************
-                      00588 ; *             Delay  1ms
-                      00589 ; *******************************************************************
-00A6                  00590 DELAY_1mS:
-00A6   3047           00591      movlw     .71                 ; delay ~1000uS
-00A7   00B3           00592      movwf     Delay
-00A8   0BB3           00593      decfsz    Delay,f             ; this loop does 215 cycles
-00A9   2???           00594      goto      $-1          
-00AA   0BB3           00595      decfsz    Delay,f             ; This loop does 786 cycles
-00AB   2???           00596      goto      $-1;
-                      00597 ;DELAY_1mS - end
-00AC   0008           00598     return
-                      00599 
-00AD   2???           00600      goto      MAIN_PROGRAM_LOOP
+                      00587 ; *             Delay  1ms
+                      00588 ; *******************************************************************
+00AD                  00589 DELAY_1mS:
+00AD   3047           00590      movlw     .71                 ; delay ~1000uS
+00AE   00B3           00591      movwf     Delay
+00AF   0BB3           00592      decfsz    Delay,f             ; this loop does 215 cycles
+00B0   2???           00593      goto      $-1          
+00B1   0BB3           00594      decfsz    Delay,f             ; This loop does 786 cycles
+00B2   2???           00595      goto      $-1;
+                      00596 ;DELAY_1mS - end
+00B3   0008           00597     return
+                      00598 
+00B4   2???           00599      goto      MAIN_PROGRAM_LOOP
+                      00600 
                       00601 
-                      00602 
-                      00603 ; *******************************************************************
-                      00604 ; *             lightness in PWM %
-                      00605 ; *******************************************************************
-                      00606 
-                      00607      org     0xf7                  ; force table to cross a 256 instruction boundary
-00F7                  00608 SET_PWM_by_lookupTable:
-00F7   3907           00609      andlw     0x07                ; mask off invalid entries
-00F8   00B4           00610      movwf     temp
-00F9   30??           00611      movlw     high TableStart     ; get high order part of the beginning of the table
-00FA   008A           00612      movwf     PCLATH
-00FB   30??           00613      movlw     low TableStart      ; load starting address of table
-00FC   0734           00614      addwf     temp,w              ; add offset
-00FD   1803           00615      btfsc     STATUS,C            ; did it overflow?
-00FE   0A8A           00616      incf      PCLATH,f            ; yes: increment PCLATH
-00FF   0082           00617      movwf     PCL                 ; modify PCL
-                      00618 
-0100                  00619 TableStart:
-0100   3403           00620      retlw     b'00000011'             ; 0
-0101   3407           00621      retlw     b'00000111'             ; 1
-0102   340B           00622      retlw     b'00001011'             ; 2
-0103   3413           00623      retlw     b'00010011'             ; 3
-0104   3423           00624      retlw     b'00100011'             ; 4
-0105   344F           00625      retlw     b'01001111'             ; 5
-0106   34A3           00626      retlw     b'10100011'             ; 6
-                      00627 ; SET_PWM_by_lookupTable_END
-                      00628 
-                      00629      
-                      00630 ; END CODE
-20C4 3EFF             00631      end
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 14
+                      00602 ; *******************************************************************
+                      00603 ; *             lightness in PWM %
+                      00604 ; *******************************************************************
+                      00605 
+                      00606      org     0xf7                  ; force table to cross a 256 instruction boundary
+00F7                  00607 SET_PWM_by_lookupTable:
+00F7   3907           00608      andlw     0x07                ; mask off invalid entries
+00F8   00B4           00609      movwf     temp
+00F9   30??           00610      movlw     high TableStart     ; get high order part of the beginning of the table
+00FA   008A           00611      movwf     PCLATH
+00FB   30??           00612      movlw     low TableStart      ; load starting address of table
+00FC   0734           00613      addwf     temp,w              ; add offset
+00FD   1803           00614      btfsc     STATUS,C            ; did it overflow?
+00FE   0A8A           00615      incf      PCLATH,f            ; yes: increment PCLATH
+00FF   0082           00616      movwf     PCL                 ; modify PCL
+                      00617 
+0100                  00618 TableStart:
+0100   3403           00619      retlw     b'00000011'             ; 0
+0101   3407           00620      retlw     b'00000111'             ; 1
+0102   340B           00621      retlw     b'00001011'             ; 2
+0103   3413           00622      retlw     b'00010011'             ; 3
+0104   3423           00623      retlw     b'00100011'             ; 4
+0105   344F           00624      retlw     b'01001111'             ; 5
+0106   34A3           00625      retlw     b'10100011'             ; 6
+                      00626 ; SET_PWM_by_lookupTable_END
+                      00627 
+                      00628      
+                      00629 ; END CODE
+20C4 3EFF             00630      end
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 14
 
 
 SYMBOL TABLE
@@ -795,7 +794,7 @@ ANS8                              00000000
 ANS9                              00000001
 ANSEL                             00000188
 ANSELH                            00000189
-ApplyBrightness                   00000091
+ApplyBrightness                   00000098
 BAUDCTL                           00000187
 BCLIE                             00000003
 BCLIF                             00000003
@@ -816,7 +815,7 @@ BRG5                              00000005
 BRG6                              00000006
 BRG7                              00000007
 BRG8                              00000000
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 15
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 15
 
 
 SYMBOL TABLE
@@ -824,14 +823,14 @@ SYMBOL TABLE
 
 BRG9                              00000001
 BRGH                              00000002
-BRIGHTNESS_OR_PATTERN_CHANGE      0000007E
-BRIGHTNESS_OR_PATTERN_CHANGE_END  00000095
+BRIGHTNESS_OR_PATTERN_CHANGE      00000088
+BRIGHTNESS_OR_PATTERN_CHANGE_END  0000009C
 BightnessSelection                00000020
 BrightnessMaxSteps                00000006
-ButtonDebounce                    0000002F
-ButtonNotPushed                   00000043
+ButtonDebounce                    00000031
+ButtonNotPushed                   00000045
 ButtonPushCounterTMP              00000025
-ButtonPushed                      0000003A
+ButtonPushed                      0000003C
 ButtonState                       00000022
 C                                 00000000
 C1CH0                             00000000
@@ -875,7 +874,7 @@ CCP2M1                            00000001
 CCP2M2                            00000002
 CCP2M3                            00000003
 CCP2X                             00000005
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 16
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 16
 
 
 SYMBOL TABLE
@@ -888,8 +887,8 @@ CCPR1L                            00000015
 CCPR2                             0000001B
 CCPR2H                            0000001C
 CCPR2L                            0000001B
-CHECK_BUTTON                      00000029
-CHECK_BUTTON_END                  0000004E
+CHECK_BUTTON                      0000002B
+CHECK_BUTTON_END                  00000050
 CHS0                              00000002
 CHS1                              00000003
 CHS2                              00000004
@@ -901,7 +900,7 @@ CM2CON0                           00000108
 CM2CON1                           00000109
 CREN                              00000004
 CSRC                              00000007
-CheckLongPush                     00000057
+CheckLongPush                     00000059
 CurrentMode                       00000021
 D                                 00000005
 DATA_ADDRESS                      00000005
@@ -910,7 +909,7 @@ DC1B0                             00000004
 DC1B1                             00000005
 DC2B0                             00000004
 DC2B1                             00000005
-DELAY_1mS                         000000A6
+DELAY_1mS                         000000AD
 D_A                               00000005
 D_NOT_A                           00000005
 Debug                             00000001
@@ -934,7 +933,7 @@ EEIE                              00000004
 EEIF                              00000004
 EEPGD                             00000007
 ExitISR                           00000029
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 17
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 17
 
 
 SYMBOL TABLE
@@ -976,7 +975,7 @@ IRP                               00000007
 IsLongPush                        00000007
 LIGHT_ON                          00000001
 LTS                               00000001
-LookForOneStableState             0000002C
+LookForOneStableState             0000002E
 MAIN_PROGRAM_CONFIG               00000000
 MAIN_PROGRAM_LOOP                 00000029
 MC1OUT                            00000007
@@ -993,7 +992,7 @@ MSK7                              00000007
 NOT_A                             00000005
 NOT_ADDRESS                       00000005
 NOT_BO                            00000000
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 18
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 18
 
 
 SYMBOL TABLE
@@ -1052,7 +1051,7 @@ PS1                               00000001
 PS2                               00000002
 PSA                               00000003
 PSSAC0                            00000002
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 19
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 19
 
 
 SYMBOL TABLE
@@ -1111,7 +1110,7 @@ RD                                00000000
 RD0                               00000000
 RD1                               00000001
 RD2                               00000002
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 20
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 20
 
 
 SYMBOL TABLE
@@ -1143,7 +1142,7 @@ SEN                               00000000
 SENDB                             00000003
 SET_PWM_by_lookupTable            000000F7
 SMP                               00000007
-SOSReverseBrightnessChange        0000008A
+SOSReverseBrightnessChange        00000094
 SOS_ON                            00000003
 SPBRG                             00000099
 SPBRGH                            0000009A
@@ -1170,7 +1169,7 @@ STATUS                            00000003
 STATUS_Save                       00000031
 STRA                              00000000
 STRB                              00000001
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 21
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 21
 
 
 SYMBOL TABLE
@@ -1229,7 +1228,7 @@ TOUTPS1                           00000004
 TOUTPS2                           00000005
 TOUTPS3                           00000006
 TRISA                             00000085
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 22
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 22
 
 
 SYMBOL TABLE
@@ -1282,13 +1281,13 @@ TUN1                              00000001
 TUN2                              00000002
 TUN3                              00000003
 TUN4                              00000004
-TURN_OFF                          00000096
+TURN_OFF                          0000009D
 TX8_9                             00000006
 TX9                               00000006
 TX9D                              00000000
 TXD8                              00000000
 TXEN                              00000005
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 23
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 23
 
 
 SYMBOL TABLE
@@ -1299,17 +1298,17 @@ TXIF                              00000004
 TXREG                             00000019
 TXSTA                             00000098
 TableStart                        00000100
-TurnOFF                           0000005C
-TurnOnWithLongPush                0000005E
+TurnOFF                           0000005E
+TurnOnWithLongPush                00000060
 UA                                00000001
 ULPWUE                            00000005
 ULPWUIE                           00000002
 ULPWUIF                           00000002
-USER_CHOISE_SELECTION             0000004E
-USER_CHOISE_SELECTION_END         0000007D
+USER_CHOISE_SELECTION             00000050
+USER_CHOISE_SELECTION_END         00000087
 UserCommandSelectionCounter       00000028
 UserCommandSelectionDelay         0000005F
-UserShortPush                     00000069
+UserShortPush                     0000006B
 VCFG0                             00000004
 VCFG1                             00000005
 VR0                               00000000
@@ -1347,7 +1346,7 @@ Z                                 00000002
 _BOR21V                           00003EFF
 _BOR40V                           00003FFF
 _BOR4V_BOR21V                     00003EFF
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 24
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 24
 
 
 SYMBOL TABLE
@@ -1401,17 +1400,19 @@ _ISR_0025                         00000025
 _LP_OSC                           00003FF8
 _LVP_OFF                          00002FFF
 _LVP_ON                           00003FFF
-_MAIN_PROG_00A9                   000000A9
-_MAIN_PROG_00AB                   000000AB
+_MAIN_PROG_007B                   0000007B
+_MAIN_PROG_007D                   0000007D
+_MAIN_PROG_00B0                   000000B0
+_MAIN_PROG_00B2                   000000B2
 _MCLRE_OFF                        00003FDF
-_MCLRE_ON                         00003FFF
-_PWRTE_OFF                        00003FFF
-MPASM  5.51                           LED.ASM   8-31-2020  23:12:18         PAGE 25
+MPASM  5.51                           LED.ASM   8-31-2020  23:53:22         PAGE 25
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+_MCLRE_ON                         00003FFF
+_PWRTE_OFF                        00003FFF
 _PWRTE_ON                         00003FEF
 _WDTE_OFF                         00003FF7
 _WDTE_ON                          00003FFF

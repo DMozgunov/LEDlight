@@ -453,22 +453,34 @@ UserShortPush:
        xorlw    b'00000100' 
     endif
 
-    btfsc       STATUS,Z           ; Choise menu is cyclic - after last position turn OFF
+    btfsc       STATUS,Z           ; Menu is cyclic - after last position turn OFF
     goto        TurnOFF
     
     btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
     bsf         T1CON,TMR1ON
 
+
+    ; for SOS mode set brightest value, and least for others
+    movf        CurrentMode,w                  
+    
+    xorlw       SOS_ON
+    btfsc       STATUS,Z
+    goto        $+3
+    movlw       0x01
+    goto        $+2
+    movlw       BrightnessMaxSteps
+    nop
+
+    movwf       BightnessSelection      ; set up current brightness anyway
+
+    call        SET_PWM_by_lookupTable        ;  
+    movwf       CCPR1L                        ; 
+
     btfsc       CurrentMode,1      ; do not turn LED in SOS or Strobe mode - it should happen in ISR
     goto        USER_CHOISE_SELECTION_END 
 
-
 	movlw		b'00101100'	  	;
 	movwf		CCP1CON			; activate PWM 
-
-    movlw       0x01
-    call        SET_PWM_by_lookupTable        ;  
-    movwf       CCPR1L                        ; 
 
 
 USER_CHOISE_SELECTION_END:
