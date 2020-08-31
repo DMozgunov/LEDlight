@@ -12,7 +12,7 @@ __CONFIG    _CONFIG2, _WRT_OFF & _BOR21V
     OneShortHumanPushCounterMAX EQU 0x07        ; Count state to get one Human button push
     OneLongHumanPushCounter     EQU 0xF8        ; Add to counter to get Carry bit for a long Human push
     UserCommandSelectionDelay   EQU 0x5F        ; Wait this number of counts to give user time for choise
-    PatternMaskInitial          EQU 0x01
+    PatternMaskInitial          EQU b'10000000'
     BrightnessMaxSteps          EQU 0x06        ; Brughtness table length
 
     FALSE	                    EQU 0
@@ -151,20 +151,13 @@ STROBE_SOS_Pattern:
 SetCurrentLEDStepOFF:
     clrf		CCP1CON			    ; disable PWM
 
-
     goto STROBE_SOS_Delay
 
 SetCurrentLEDStepON:
    	movlw		b'00101100'	  	    ;
 	movwf		CCP1CON			    ; enable PWM 
 
-
 STROBE_SOS_Delay:
-    ;movlw       b'00101001'
-    ;movwf       Pattern0
-
-    ;movlw       b'10001111'
-    ;movwf       Delay0
 
     movf        PatternMask,w
     andwf       Delay0,w
@@ -175,7 +168,7 @@ STROBE_SOS_Delay:
 
 SetCurrentLEDDelayShort:
 
-    movlw       0x8F
+    movlw       0xBF
     movwf       TMR1H
 
     goto Prepare_for_next_check
@@ -184,15 +177,15 @@ SetCurrentLEDDelayLong:
     nop
 
     ;debug
-    ;movf        Delay0,w
+    ;movf        PatternMask,w
     ;movwf       PORTD               ; 
     ;debug
 
 Prepare_for_next_check:
-    rlf         PatternMask,f
+    rrf         PatternMask,f
 
     btfss       STATUS,C            ; overflow of PatternMask, must be set to default
-    ; implement cyclic pattern addr change here
+
     goto        $+3
     movlw       PatternMaskInitial
     movwf       PatternMask
@@ -282,10 +275,10 @@ MAIN_PROGRAM_CONFIG:
 
     call        TURN_OFF        ; initial state
 
-    movlw       b'01010101'
+    movlw       b'10010100'
     movwf       Pattern0
 
-    movlw       b'00010001'
+    movlw       b'11100011'
     movwf       Delay0
 
     movlw       PatternMaskInitial
