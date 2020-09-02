@@ -58,6 +58,10 @@ cblock 0x20
 
     PatternMask
 
+    Offset_Current
+    Offset_Start
+    Offset_End
+
     ; Interrupr service
 	W_Save
 	STATUS_Save
@@ -140,6 +144,22 @@ STROBE_SOS_Pattern:
     btfss       CurrentMode,1                
     goto        ExitISR
 
+    ; load Pattern and Delay
+
+    movf        Offset_Current,w
+    call        SET_Pattern_by_lookupTable
+    movwf       Pattern0
+
+    ;debug
+    ;movf        Pattern0,w
+    ;movwf       PORTD               ; 
+    ;debug
+
+
+    movf        Offset_Current,w
+    call        SET_Delay_by_lookupTable
+    movwf       Delay0
+
     ; Check pattern and turn LED on or off
     movf        PatternMask,w
     andwf       Pattern0,w
@@ -149,13 +169,13 @@ STROBE_SOS_Pattern:
     goto        SetCurrentLEDStepON     ;must be on
 
 SetCurrentLEDStepOFF:
-    clrf		CCP1CON			    ; disable PWM
+    clrf		CCP1CON			        ; disable PWM
 
     goto STROBE_SOS_Delay
 
 SetCurrentLEDStepON:
-   	movlw		b'00101100'	  	    ;
-	movwf		CCP1CON			    ; enable PWM 
+   	movlw		b'00101100'	  	    
+	movwf		CCP1CON			        ; enable PWM 
 
 STROBE_SOS_Delay:
 
@@ -178,18 +198,33 @@ SetCurrentLEDDelayLong:
 
     ;debug
     ;movf        PatternMask,w
-    ;movwf       PORTD               ; 
+    ;movwf       PORTD                      ; 
     ;debug
 
 Prepare_for_next_check:
     rrf         PatternMask,f
 
-    btfss       STATUS,C            ; overflow of PatternMask, must be set to default
-
-    goto        $+3
+    btfss       STATUS,C                    ; overflow of PatternMask, must be set to default
+    goto        Prepare_for_next_check_END
     movlw       PatternMaskInitial
     movwf       PatternMask
-    nop
+
+    ; check if Offset_Current is bigger then Offset_End
+
+    incf        Offset_Current,f
+    incf        Offset_End,w
+
+    xorwf       Offset_Current,w
+
+    btfss       STATUS,Z                    ; if it is, reset to Offset_Start
+    goto        Prepare_for_next_check_END
+    
+    movf        Offset_Start,w
+    movwf       Offset_Current
+
+Prepare_for_next_check_END:
+
+
 ; STROBE/SOS pattern processing routine END
 
 ExitISR
@@ -430,13 +465,20 @@ TurnOnWithLongPush:
         
     else
 
+        ; set Offset for Pattern and Delay
+        clrf        Offset_Start
+        clrf        Offset_Current
+        movlw       0x02
+        movwf       Offset_End
+    
+        ; set maximum brightness for SOS mode
         movlw       BrightnessMaxSteps
         movwf       BightnessSelection
 
         call        SET_PWM_by_lookupTable        ;  
         movwf       CCPR1L                        ; 
 
-        btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
+        btfsc       CurrentMode,1      ; Enable Timer1 for pattern processing for LED in SOS or Strobe mode
         bsf         T1CON,TMR1ON
 
     endif
@@ -473,10 +515,34 @@ UserShortPush:
     btfsc       STATUS,Z           ; Menu is cyclic - after last position turn OFF
     goto        TurnOFF
     
-    btfsc       CurrentMode,1      ; Enable Timer1 for LED in SOS or Strobe mode
+    btfsc       CurrentMode,1      ; Enable Timer1 for pattern processing for LED in SOS or Strobe mode
     bsf         T1CON,TMR1ON
 
+    ; select pattern and delay register offset for Strobe and SOS mode
+    btfss       CurrentMode,1      
+    goto        SetInitialBrightness
 
+    ;SOS
+    btfss       CurrentMode,0
+    goto        SetInitialStrobeOffset
+
+    clrf        Offset_Start
+    clrf        Offset_Current
+    movlw       0x02
+    movwf       Offset_End
+
+    goto        SetInitialBrightness
+
+    ;Strobe
+SetInitialStrobeOffset:
+
+    movlw       0x03
+    movwf       Offset_Start
+    movwf       Offset_Current
+    movlw       0x05
+    movwf       Offset_End
+
+SetInitialBrightness:
     ; for SOS mode set brightest value, and least for others
     movf        CurrentMode,w                  
     
@@ -624,15 +690,15 @@ DELAY_1mS:
 SET_PWM_by_lookupTable:
      andlw     0x07                ; mask off invalid entries
      movwf     temp
-     movlw     high TableStart     ; get high order part of the beginning of the table
+     movlw     high PWMTableStart     ; get high order part of the beginning of the table
      movwf     PCLATH
-     movlw     low TableStart      ; load starting address of table
+     movlw     low PWMTableStart      ; load starting address of table
      addwf     temp,w              ; add offset
      btfsc     STATUS,C            ; did it overflow?
      incf      PCLATH,f            ; yes: increment PCLATH
      movwf     PCL                 ; modify PCL
 
-TableStart:
+PWMTableStart:
      retlw     b'00000011'             ; 0
      retlw     b'00000111'             ; 1
      retlw     b'00001011'             ; 2
@@ -641,6 +707,48 @@ TableStart:
      retlw     b'01001111'             ; 5
      retlw     b'10100011'             ; 6
 ; SET_PWM_by_lookupTable_END
+
+
+SET_Pattern_by_lookupTable:
+     andlw     0x07                         ; mask off invalid entries
+     movwf     temp
+     movlw     high PatternTableStart        ; get high order part of the beginning of the table
+     movwf     PCLATH   
+     movlw     low PatternTableStart         ; load starting address of table
+     addwf     temp,w                       ; add offset
+     btfsc     STATUS,C                     ; did it overflow?
+     incf      PCLATH,f                     ; yes: increment PCLATH
+     movwf     PCL                          ; modify PCL
+
+PatternTableStart:
+     retlw     b'00010101'                  ; SOS start
+     retlw     b'01010101'
+     retlw     b'01010000'                  ; SOS end
+     retlw     b'10101010'                  ; Strobe4 start
+     retlw     b'10101010'
+     retlw     b'10101010'                  ; Strobe4 end
+;SET_Patern_by_lookupTable_END
+
+
+SET_Delay_by_lookupTable:
+     andlw     0x07                         ; mask off invalid entries
+     movwf     temp
+     movlw     high DelayTableStart         ; get high order part of the beginning of the table
+     movwf     PCLATH
+     movlw     low DelayTableStart          ; load starting address of table
+     addwf     temp,w                       ; add offset
+     btfsc     STATUS,C                     ; did it overflow?
+     incf      PCLATH,f                     ; yes: increment PCLATH
+     movwf     PCL                          ; modify PCL
+
+DelayTableStart:
+     retlw     b'00001010'                  ; SOS start
+     retlw     b'11111110'
+     retlw     b'10101111'                  ; SOS end
+     retlw     b'00010001'                  ; Strobe4 start
+     retlw     b'00010001'
+     retlw     b'00010001'                  ; Strobe4 end
+;SET_Delay_by_lookupTable_END
 
      
 ; END CODE
